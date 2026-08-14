@@ -66,10 +66,12 @@ jobs:
           print(job_id)
           PY
 
-      - name: Poll once
+      - name: Poll until terminal state
         env:
           TRANSCRIBETOOL_API_KEY: ${{ secrets.TRANSCRIBETOOL_API_KEY }}
           TRANSCRIBETOOL_BASE_URL: ${{ vars.TRANSCRIBETOOL_BASE_URL || 'https://transcribetool.com' }}
+          TRANSCRIBETOOL_POLL_INTERVAL_MS: "10000"
+          TRANSCRIBETOOL_POLL_MAX_ATTEMPTS: "60"
         run: |
           JOB_ID=$(cat job_id.txt)
           node examples/github/javascript/poll-job.mjs transcript "$JOB_ID" > poll.json

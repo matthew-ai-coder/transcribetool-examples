@@ -25,11 +25,13 @@ examples/github/
 ├── javascript/
 │   ├── transcript-job.mjs
 │   ├── batch-job.mjs
-│   └── poll-job.mjs
+│   ├── poll-job.mjs
+│   └── download-artifact.mjs
 ├── python/
 │   ├── transcript_job.py
 │   ├── batch_job.py
-│   └── poll_job.py
+│   ├── poll_job.py
+│   └── download_artifact.py
 └── README.md
 ```
 
@@ -99,7 +101,7 @@ Transcript work is billed **per second** and only **successfully completed trans
 This starter kit includes:
 - a workflow-dispatch example
 - a transcript submit step
-- a polling step
+- polling until terminal state
 - artifact upload of the resulting job JSON
 
 See:
@@ -122,8 +124,20 @@ This kit is for actual integration work:
 ## Operational notes
 - prefer async transcript and batch routes for long-running work
 - keep `billing.max_amount_usd` explicit in production workflows
-- poll job state before downstream automation assumes completion
+- poll until terminal state before downstream automation assumes completion
+- download artifacts only after a successful terminal state
 - treat these examples as starter integration patterns, then harden them for your own retry, alerting, and artifact-handling requirements
+
+## Artifact download examples
+### JavaScript
+```bash
+node javascript/download-artifact.mjs trn_your_transcript_id transcript_md
+```
+
+### Python
+```bash
+python3 python/download_artifact.py trn_your_transcript_id transcript_md
+```
 
 ## Recommended next upgrades
 - add real response fixtures
