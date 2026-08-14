@@ -1,0 +1,85 @@
+name: TranscribeTool transcript job
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_type:
+        description: "Source adapter key (youtube_url, vimeo_url, bilibili_url, tiktok_url, media_id, podcast_episode_url)"
+        required: true
+        default: "youtube_url"
+      source_value:
+        description: "Source value for the selected adapter"
+        required: true
+        default: "https://www.youtube.com/watch?v=MNNfat_QP0E"
+
+jobs:
+  submit-and-poll:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Submit transcript job
+        env:
+          TRANSCRIBETOOL_API_KEY: ${{ secrets.TRANSCRIBETOOL_API_KEY }}
+          TRANSCRIBETOOL_BASE_URL: ${{ vars.TRANSCRIBETOOL_BASE_URL || 'https://transcribetool.com' }}
+          SOURCE_TYPE: ${{ inputs.source_type }}
+          SOURCE_VALUE: ${{ inputs.source_value }}
+        run: |
+          node -e '
+          const source = { [process.env.SOURCE_TYPE]: process.env.SOURCE_VALUE };
+          fetch(`${process.env.TRANSCRIBETOOL_BASE_URL}/api/v1/transcript-jobs`, {
+            method: "POST",
+            headers: {
+              "x-api-key": process.env.TRANSCRIBETOOL_API_KEY,
+              "content-type": "application/json",
+            },
+            body: JSON.stringify({
+              source,
+              source_app: "github_actions",
+              modules: { summary: true },
+              billing: { mode: "metered", max_amount_usd: 2.0 },
+            }),
+          })
+            .then(async (r) => {
+              const text = await r.text();
+              console.log(text);
+              require("fs").writeFileSync("submit.json", text);
+            });
+          '
+
+      - name: Extract job id
+        run: |
+          python3 - <<'PY'
+          import json
+          data = json.load(open('submit.json'))
+          job_id = data.get('job_id') or data.get('id')
+          if not job_id:
+              raise SystemExit('No job id found in submit.json')
+          with open('job_id.txt', 'w') as f:
+              f.write(job_id)
+          print(job_id)
+          PY
+
+      - name: Poll once
+        env:
+          TRANSCRIBETOOL_API_KEY: ${{ secrets.TRANSCRIBETOOL_API_KEY }}
+          TRANSCRIBETOOL_BASE_URL: ${{ vars.TRANSCRIBETOOL_BASE_URL || 'https://transcribetool.com' }}
+        run: |
+          JOB_ID=$(cat job_id.txt)
+          node examples/github/javascript/poll-job.mjs transcript "$JOB_ID" > poll.json
+          cat poll.json
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: transcribetool-job-response
+          path: |
+            submit.json
+            poll.json
+            job_id.txt
