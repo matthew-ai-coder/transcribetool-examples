@@ -1,15 +1,15 @@
 # TranscribeTool GitHub Starter Kit
 
-> GitHub-ready examples for developers and agents who want to integrate TranscribeTool into scripts, repos, CI, and workflow automation.
+> Production-oriented examples for integrating TranscribeTool into repositories, CI pipelines, scheduled workflows, and agent-driven media operations.
 
-This folder is intentionally shaped more like a **real GitHub starter repo** than a marketing page.
+This folder is intentionally shaped like a **real GitHub starter repo**: clear environment setup, runnable scripts, polling utilities, and a GitHub Actions workflow template.
 
-## What this kit is for
-- quick proof-of-integration in a repo
-- copy-paste examples for agents and developers
-- CI / GitHub Actions workflows
+## What this kit supports
+- production-facing transcript job submission
+- batch transcription workflows
+- CI and GitHub Actions integration
 - adapter coverage across the main source types
-- explicit billing guardrails
+- explicit billing guardrails and operational clarity
 
 ## Included
 ```text
@@ -112,16 +112,21 @@ Optional Variables:
 - `TRANSCRIBETOOL_BASE_URL`
 
 ## Why this is distinct from the website docs
-The website explains the product.
-This kit is for:
+The website explains the product category and API surface.
+This kit is for actual integration work:
 - cloning into a repo
-- pasting into CI
-- adapting into real automation
-- giving agents concrete files to inspect
+- wiring into CI
+- adapting into scheduled or event-driven automation
+- giving agents and developers concrete files to inspect and reuse
 
-## Good next upgrades
-If this becomes a public repo, add:
-- real response fixtures
-- one end-to-end polling + download example
-- a GitHub Action wrapper
-- typed Node/Python SDK examples
+## Operational notes
+- prefer async transcript and batch routes for long-running work
+- keep `billing.max_amount_usd` explicit in production workflows
+- poll job state before downstream automation assumes completion
+- treat these examples as starter integration patterns, then harden them for your own retry, alerting, and artifact-handling requirements
+
+## Recommended next upgrades
+- add real response fixtures
+- add one end-to-end polling + download example
+- add a reusable GitHub Action wrapper
+- add typed Node and Python SDK examples
