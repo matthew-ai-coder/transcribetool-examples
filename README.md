@@ -2,7 +2,12 @@
 
 > Production-oriented examples for integrating TranscribeTool into repositories, CI pipelines, scheduled workflows, and agent-driven media operations.
 
-This folder is intentionally shaped like a **real GitHub starter repo**: clear environment setup, runnable scripts, polling utilities, and a GitHub Actions workflow template.
+**Links**
+- Product site: https://transcribetool.com/
+- API overview: https://transcribetool.com/api
+- GitHub examples page: https://transcribetool.com/github-examples
+
+This repo is intentionally shaped like a **real GitHub starter surface**: clear environment setup, runnable scripts, polling utilities, artifact download flows, and a GitHub Actions workflow template.
 
 ## What this kit supports
 - production-facing transcript job submission
