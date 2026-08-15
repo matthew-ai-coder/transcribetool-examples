@@ -2,10 +2,15 @@
 
 > Production-oriented examples for integrating TranscribeTool into repositories, CI pipelines, scheduled workflows, and agent-driven media operations.
 
-**Links**
-- Product site: https://transcribetool.com/
-- API overview: https://transcribetool.com/api
-- GitHub examples page: https://transcribetool.com/github-examples
+[![Product site](https://img.shields.io/badge/Product-TranscribeTool-black)](https://transcribetool.com/)
+[![API overview](https://img.shields.io/badge/API-Overview-5B5BD6)](https://transcribetool.com/api)
+[![GitHub examples page](https://img.shields.io/badge/Site-GitHub%20Examples-0F766E)](https://transcribetool.com/github-examples)
+
+## Start here
+- [Quickstart](#quickstart)
+- [What this kit supports](#what-this-kit-supports)
+- [Artifact download examples](#artifact-download-examples)
+- [GitHub Actions usage](#github-actions-usage)
 
 This repo is intentionally shaped like a **real GitHub starter surface**: clear environment setup, runnable scripts, polling utilities, artifact download flows, and a GitHub Actions workflow template.
 
