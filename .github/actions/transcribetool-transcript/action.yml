@@ -1,0 +1,44 @@
+name: "TranscribeTool transcript job"
+description: "Submit a transcript job, poll until terminal state, and optionally download one artifact."
+author: "Matthew Ong"
+inputs:
+  api_key:
+    description: "TranscribeTool API key"
+    required: true
+  input_json:
+    description: "Transcript API request body as JSON"
+    required: true
+  artifact_kind:
+    description: "Artifact kind to download after success, such as transcript_md"
+    required: false
+    default: ""
+  poll_interval_seconds:
+    description: "Polling interval in seconds"
+    required: false
+    default: "10"
+outputs:
+  job_id:
+    description: "Created transcript job ID"
+    value: ${{ steps.run.outputs.job_id }}
+  status:
+    description: "Final transcript job status"
+    value: ${{ steps.run.outputs.status }}
+  artifact_path:
+    description: "Downloaded artifact path if one was requested"
+    value: ${{ steps.run.outputs.artifact_path }}
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+    - name: Run transcript flow
+      id: run
+      shell: bash
+      env:
+        TRANSCRIBETOOL_API_KEY: ${{ inputs.api_key }}
+        TRANSCRIBETOOL_INPUT_JSON: ${{ inputs.input_json }}
+        TRANSCRIBETOOL_ARTIFACT_KIND: ${{ inputs.artifact_kind }}
+        TRANSCRIBETOOL_POLL_INTERVAL_SECONDS: ${{ inputs.poll_interval_seconds }}
+      run: python "$GITHUB_ACTION_PATH/run.py"

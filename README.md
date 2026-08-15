@@ -107,6 +107,20 @@ Use a spend cap in every integration:
 
 Transcript work is billed **per second** and only **successfully completed transcript time** is charged.
 
+## Reusable GitHub Action wrapper
+Use `.github/actions/transcribetool-transcript/` when you want one reusable workflow building block that submits a transcript job, polls to terminal state, and can optionally download an artifact.
+
+Example:
+```yaml
+- name: Run TranscribeTool transcript action
+  uses: ./.github/actions/transcribetool-transcript
+  with:
+    api_key: ${{ secrets.TRANSCRIBETOOL_API_KEY }}
+    input_json: >-
+      {"youtube_url":"https://www.youtube.com/watch?v=MNNfat_QP0E"}
+    artifact_kind: transcript_md
+```
+
 ## GitHub Actions usage
 This starter kit includes:
 - a workflow-dispatch example
